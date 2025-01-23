@@ -98,11 +98,17 @@ This step can be performed whenever a platform change is needed.
    export TF_VAR_cert_manager_lets_encrypt_issuer_acme_email=
    ```
 
-4. Init Terraform script
+4. Export Terraform state backend connection secret:
+
+   ```shell
+   export ARM_ACCESS_KEY=
+   ```
+
+5. Init Terraform script
    ```shell
    terraform -chdir=examples/development init
    ```
-5. Apply Terraform script
+6. Apply Terraform script
    ```shell
    terraform -chdir=examples/development apply
    ```
