@@ -65,7 +65,7 @@ variable "cluster_default_node_pool_node_count" {
 }
 
 variable "user_identity_id" {
-  default = null
+  default     = null
   description = "The id of the user used by terraform to create cluster"
   type        = string
 }

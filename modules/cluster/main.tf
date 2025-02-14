@@ -48,12 +48,12 @@ resource "azurerm_kubernetes_cluster" "cluster" {
   }
 
   identity {
-    type = var.user_identity_id != null ? "UserAssigned" : "SystemAssigned"
-    identity_ids = var.user_identity_id != null ? [var.user_identity_id] : []
+    type         = var.user_identity_id != null && var.user_identity_id != "" ? "UserAssigned" : "SystemAssigned"
+    identity_ids = var.user_identity_id != null && var.user_identity_id != "" ? [var.user_identity_id] : null
   }
 
   dynamic "network_profile" {
-    for_each = var.public_ip_id != null ? [1] : []
+    for_each = var.public_ip_id != null && var.public_ip_id != "" ? [1] : []
     content {
       network_plugin    = "azure"
       load_balancer_sku = "standard"

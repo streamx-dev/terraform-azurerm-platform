@@ -43,7 +43,7 @@ locals {
       key                  = key
     })
   })
-  tf_backends_with_path = tomap({for k, v in var.tf_backends : k => v if v != null})
+  tf_backends_with_path = tomap({ for k, v in var.tf_backends : k => v if v != null })
 }
 
 resource "local_file" "tf_backend_file" {

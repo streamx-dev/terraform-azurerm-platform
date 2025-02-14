@@ -28,8 +28,7 @@ variable "azurerm_storage_container_name" {
   type        = string
 }
 
-variable "tf_backend_file_path" {
-  default     = null
-  description = "Terraform backend file path."
-  type        = string
+variable "tf_backends" {
+  description = "Terraform backends defined as map where key is `azurerm` backend key and value is a path where backend configuration is created."
+  type        = map(string)
 }
