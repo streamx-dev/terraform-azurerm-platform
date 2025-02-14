@@ -77,5 +77,5 @@ variable "kubeconfig_path" {
 
 variable "public_ip_id" {
   default     = null
-  description = "Public ip id for kubernetes cluster"
+  description = "Public static IP ID for kubernetes cluster"
 }
