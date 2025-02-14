@@ -48,7 +48,20 @@ resource "azurerm_kubernetes_cluster" "cluster" {
   }
 
   identity {
-    type = "SystemAssigned"
+    type = var.user_identity_id != null ? "UserAssigned" : "SystemAssigned"
+    identity_ids = var.user_identity_id != null ? [var.user_identity_id] : []
+  }
+
+  dynamic "network_profile" {
+    for_each = var.public_ip_id != null ? [1] : []
+    content {
+      network_plugin    = "azure"
+      load_balancer_sku = "standard"
+
+      load_balancer_profile {
+        outbound_ip_address_ids = [var.public_ip_id]
+      }
+    }
   }
 }
 

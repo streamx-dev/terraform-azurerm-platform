@@ -64,7 +64,18 @@ variable "cluster_default_node_pool_node_count" {
   type        = number
 }
 
+variable "user_identity_id" {
+  default = null
+  description = "The id of the user used by terraform to create cluster"
+  type        = string
+}
+
 variable "kubeconfig_path" {
   default     = null
   description = "Script creates kubeconfig file with provided path. No file is created when null is provided."
+}
+
+variable "public_ip_id" {
+  default     = null
+  description = "Public ip id for kubernetes cluster"
 }
