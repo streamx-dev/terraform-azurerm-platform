@@ -35,20 +35,19 @@ resource "azurerm_storage_container" "tfstate" {
 }
 
 locals {
-  terraform_state_backend_config = <<TF_STATE_BACKEND_CONFIG
-terraform {
-  backend "azurerm" {
-      resource_group_name  = "${var.resource_group_name}"
-      storage_account_name = "${azurerm_storage_account.tfstate.name}"
-      container_name       = "${azurerm_storage_container.tfstate.name}"
-      key                  = "terraform.tfstate"
-  }
-}
-  TF_STATE_BACKEND_CONFIG
+  terraform_state_backend_config = tomap({
+    for key, tf_backend_path in var.tf_backends : key => templatefile("${path.module}/backend_template.tftpl", {
+      resource_group_name  = var.resource_group_name
+      storage_account_name = azurerm_storage_account.tfstate.name
+      container_name       = azurerm_storage_container.tfstate.name
+      key                  = key
+    })
+  })
+  tf_backends_with_path = tomap({ for k, v in var.tf_backends : k => v if v != null })
 }
 
 resource "local_file" "tf_backend_file" {
-  count    = var.tf_backend_file_path == null ? 0 : 1
-  filename = var.tf_backend_file_path
-  content  = local.terraform_state_backend_config
+  for_each = local.tf_backends_with_path
+  filename = each.value
+  content  = local.terraform_state_backend_config[each.key]
 }
