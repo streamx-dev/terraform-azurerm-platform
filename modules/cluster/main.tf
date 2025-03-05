@@ -38,13 +38,15 @@ resource "azurerm_kubernetes_cluster" "cluster" {
     name       = "default"
     node_count = local.cluster_default_node_pool_node_count
     vm_size    = local.cluster_default_node_pool_vm_size
+    auto_scaling_enabled = true
+    max_pods   = 60
+
 
     upgrade_settings {
       drain_timeout_in_minutes      = 0
       max_surge                     = "10%"
       node_soak_duration_in_minutes = 0
     }
-
   }
 
   identity {
@@ -62,6 +64,12 @@ resource "azurerm_kubernetes_cluster" "cluster" {
         outbound_ip_address_ids = [var.public_ip_id]
       }
     }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      default_node_pool[0].node_count
+    ]
   }
 }
 
