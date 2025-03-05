@@ -25,12 +25,16 @@ module "cluster" {
   count  = var.cluster_enabled ? 1 : 0
   source = "./modules/cluster"
 
-  cluster_name                         = var.cluster_name
-  location                             = var.location
-  resources_group_name                 = var.resource_group_enabled ? module.resource_group[0].resources_group_name : var.resources_group_name
-  cluster_default_node_pool_vm_size    = var.cluster_default_node_pool_vm_size
-  cluster_default_node_pool_node_count = var.cluster_default_node_pool_node_count
-  kubeconfig_path                      = var.kubeconfig_path
-  user_identity_id                     = var.user_identity_id
-  public_ip_id                         = var.public_ip_id
+  cluster_name                                  = var.cluster_name
+  location                                      = var.location
+  resources_group_name                          = var.resource_group_enabled ? module.resource_group[0].resources_group_name : var.resources_group_name
+  cluster_default_node_pool_vm_size             = var.cluster_default_node_pool_vm_size
+  cluster_default_node_pool_node_count          = var.cluster_default_node_pool_node_count
+  cluster_default_node_pool_node_min_count      = var.cluster_default_node_pool_node_count
+  cluster_default_node_pool_node_max_count      = var.cluster_default_node_pool_node_max_count
+  cluster_default_node_pool_node_max_pods       = var.cluster_default_node_pool_node_max_pods
+  cluster_default_node_pool_autoscaling_enabled = var.cluster_default_node_pool_autoscaling_enabled
+  kubeconfig_path                               = var.kubeconfig_path
+  user_identity_id                              = var.user_identity_id
+  public_ip_id                                  = var.public_ip_id
 }

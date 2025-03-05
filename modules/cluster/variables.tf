@@ -46,6 +46,30 @@ variable "cluster_default_node_pool_node_count" {
   type        = number
 }
 
+variable "cluster_default_node_pool_node_max_count" {
+  default     = 8
+  description = "Kubernetes cluster default node pool max node count."
+  type        = number
+}
+
+variable "cluster_default_node_pool_node_min_count" {
+  default     = 3
+  description = "Kubernetes cluster default node pool min node count."
+  type        = number
+}
+
+variable "cluster_default_node_pool_node_max_pods" {
+  default     = 60
+  description = "Kubernetes cluster default node pool max pods count."
+  type        = number
+}
+
+variable "cluster_default_node_pool_autoscaling_enabled" {
+  default     = true
+  description = "Kubernetes cluster default node pool autoscaling enabled flag."
+  type        = bool
+}
+
 variable "user_identity_id" {
   default     = null
   description = "The id of the user used by terraform to create cluster"
