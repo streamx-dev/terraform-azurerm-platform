@@ -29,7 +29,7 @@ variable "storage_account_name_prefix" {
 }
 
 variable "storage_account_tier" {
-  deafult     = "Standard"
+  default     = "Standard"
   description = "Azure Storage Account tier."
   type        = string
 }
