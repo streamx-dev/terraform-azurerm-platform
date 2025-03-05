@@ -31,4 +31,6 @@ module "cluster" {
   cluster_default_node_pool_vm_size    = var.cluster_default_node_pool_vm_size
   cluster_default_node_pool_node_count = var.cluster_default_node_pool_node_count
   kubeconfig_path                      = var.kubeconfig_path
+  user_identity_id                     = var.user_identity_id
+  public_ip_id                         = var.public_ip_id
 }
