@@ -14,17 +14,26 @@
 #
 
 locals {
-  default_resources_group_name                 = "streamx-commerce-accelerator"
-  default_location                             = "West Europe"
-  default_cluster_name                         = "streamx-commerce-accelerator"
-  default_cluster_default_node_pool_vm_size    = "Standard_D2_v2"
-  default_cluster_default_node_pool_node_count = 5
+  default_resources_group_name                          = "streamx-commerce-accelerator"
+  default_location                                      = "West Europe"
+  default_cluster_name                                  = "streamx-commerce-accelerator"
+  default_cluster_default_node_pool_vm_size             = "Standard_D2_v2"
+  default_cluster_default_node_pool_node_count          = 5
+  default_cluster_default_node_pool_node_max_count      = 8
+  default_cluster_default_node_pool_node_min_count      = 3
+  default_cluster_default_node_pool_node_max_pods       = 60
+  default_cluster_default_node_pool_autoscaling_enabled = true
 
-  resources_group_name                 = var.force_defaults_for_null_variables && var.resources_group_name == null ? local.default_resources_group_name : var.resources_group_name
-  location                             = var.force_defaults_for_null_variables && var.location == null ? local.default_location : var.location
-  cluster_name                         = var.force_defaults_for_null_variables && var.cluster_name == null ? local.default_cluster_name : var.cluster_name
-  cluster_default_node_pool_vm_size    = var.force_defaults_for_null_variables && var.cluster_default_node_pool_vm_size == null ? local.default_cluster_default_node_pool_vm_size : var.cluster_default_node_pool_vm_size
-  cluster_default_node_pool_node_count = var.force_defaults_for_null_variables && var.cluster_default_node_pool_node_count == null ? local.default_cluster_default_node_pool_node_count : var.cluster_default_node_pool_node_count
+  resources_group_name                          = var.force_defaults_for_null_variables && var.resources_group_name == null ? local.default_resources_group_name : var.resources_group_name
+  location                                      = var.force_defaults_for_null_variables && var.location == null ? local.default_location : var.location
+  cluster_name                                  = var.force_defaults_for_null_variables && var.cluster_name == null ? local.default_cluster_name : var.cluster_name
+  cluster_default_node_pool_vm_size             = var.force_defaults_for_null_variables && var.cluster_default_node_pool_vm_size == null ? local.default_cluster_default_node_pool_vm_size : var.cluster_default_node_pool_vm_size
+  cluster_default_node_pool_node_count          = var.force_defaults_for_null_variables && var.cluster_default_node_pool_node_count == null ? local.default_cluster_default_node_pool_node_count : var.cluster_default_node_pool_node_count
+  cluster_default_node_pool_node_max_count      = var.force_defaults_for_null_variables && var.cluster_default_node_pool_node_max_count == null ? local.default_cluster_default_node_pool_node_max_count : var.cluster_default_node_pool_node_max_count
+  cluster_default_node_pool_node_min_count      = var.force_defaults_for_null_variables && var.cluster_default_node_pool_node_min_count == null ? local.default_cluster_default_node_pool_node_min_count : var.cluster_default_node_pool_node_min_count
+  cluster_default_node_pool_node_max_pods       = var.force_defaults_for_null_variables && var.cluster_default_node_pool_node_max_pods == null ? local.default_cluster_default_node_pool_node_max_pods : var.cluster_default_node_pool_node_max_pods
+  cluster_default_node_pool_autoscaling_enabled = var.force_defaults_for_null_variables && var.cluster_default_node_pool_autoscaling_enabled == null ? local.default_cluster_default_node_pool_autoscaling_enabled : var.cluster_default_node_pool_autoscaling_enabled
+
 }
 
 resource "azurerm_kubernetes_cluster" "cluster" {
@@ -35,16 +44,21 @@ resource "azurerm_kubernetes_cluster" "cluster" {
   dns_prefix = local.cluster_name
 
   default_node_pool {
-    name       = "default"
-    node_count = local.cluster_default_node_pool_node_count
-    vm_size    = local.cluster_default_node_pool_vm_size
+    name                        = "default"
+    node_count                  = local.cluster_default_node_pool_node_count
+    vm_size                     = local.cluster_default_node_pool_vm_size
+    auto_scaling_enabled        = local.cluster_default_node_pool_autoscaling_enabled
+    max_pods                    = local.cluster_default_node_pool_node_max_pods
+    min_count                   = local.cluster_default_node_pool_node_min_count
+    max_count                   = local.cluster_default_node_pool_node_max_count
+    temporary_name_for_rotation = "sxtmp"
+
 
     upgrade_settings {
       drain_timeout_in_minutes      = 0
       max_surge                     = "10%"
       node_soak_duration_in_minutes = 0
     }
-
   }
 
   identity {
@@ -62,6 +76,12 @@ resource "azurerm_kubernetes_cluster" "cluster" {
         outbound_ip_address_ids = [var.public_ip_id]
       }
     }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      default_node_pool[0].node_count
+    ]
   }
 }
 
