@@ -44,13 +44,14 @@ resource "azurerm_kubernetes_cluster" "cluster" {
   dns_prefix = local.cluster_name
 
   default_node_pool {
-    name                 = "default"
-    node_count           = local.cluster_default_node_pool_node_count
-    vm_size              = local.cluster_default_node_pool_vm_size
-    auto_scaling_enabled = local.cluster_default_node_pool_autoscaling_enabled
-    max_pods             = local.cluster_default_node_pool_node_max_pods
-    min_count            = local.cluster_default_node_pool_node_min_count
-    max_count            = local.cluster_default_node_pool_node_max_count
+    name                        = "default"
+    node_count                  = local.cluster_default_node_pool_node_count
+    vm_size                     = local.cluster_default_node_pool_vm_size
+    auto_scaling_enabled        = local.cluster_default_node_pool_autoscaling_enabled
+    max_pods                    = local.cluster_default_node_pool_node_max_pods
+    min_count                   = local.cluster_default_node_pool_node_min_count
+    max_count                   = local.cluster_default_node_pool_node_max_count
+    temporary_name_for_rotation = "sxtmp"
 
 
     upgrade_settings {
