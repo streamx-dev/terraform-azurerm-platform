@@ -34,6 +34,12 @@ variable "storage_account_tier" {
   type        = string
 }
 
+variable "storage_account_kind" {
+  default     = "StorageV2"
+  description = "Azure Storage Account kind."
+  type        = string
+}
+
 variable "storage_account_replication_type" {
   default     = "LRS"
   description = "Azure Storage Account replication type."
