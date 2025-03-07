@@ -51,7 +51,7 @@ resource "azurerm_kubernetes_cluster" "cluster" {
     max_pods                    = local.cluster_default_node_pool_node_max_pods
     min_count                   = local.cluster_default_node_pool_node_min_count
     max_count                   = local.cluster_default_node_pool_node_max_count
-    temporary_name_for_rotation = "sxtmp"
+    temporary_name_for_rotation = "rotation"
 
 
     upgrade_settings {
